@@ -6,38 +6,45 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1300</width>
-    <height>1457</height>
+    <width>836</width>
+    <height>600</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Live View</string>
-  </property>
-  <property name="styleSheet">
-   <string notr="true"/>
+   <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QWidget" name="Cam_1" native="true">
-    <property name="geometry">
-     <rect>
-      <x>34</x>
-      <y>89</y>
-      <width>1291</width>
-      <height>661</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QPushButton" name="startButton1">
     <property name="geometry">
      <rect>
-      <x>700</x>
-      <y>15</y>
-      <width>200</width>
-      <height>61</height>
+      <x>340</x>
+      <y>10</y>
+      <width>121</width>
+      <height>51</height>
      </rect>
     </property>
     <property name="text">
-     <string>Start Camera IP</string>
+     <string>Start</string>
+    </property>
+   </widget>
+   <widget class="QWidget" name="Cam_1" native="true">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>80</y>
+      <width>391</width>
+      <height>461</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QWidget" name="Cam_2" native="true">
+    <property name="geometry">
+     <rect>
+      <x>430</x>
+      <y>80</y>
+      <width>391</width>
+      <height>461</height>
+     </rect>
     </property>
    </widget>
   </widget>
@@ -46,7 +53,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1300</width>
+     <width>836</width>
      <height>25</height>
     </rect>
    </property>

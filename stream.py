@@ -13,9 +13,10 @@ os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 
 running1 = False
-q = queue.Queue()
+q1 = queue.Queue()
+q2 = queue.Queue()
 
-form_class = uic.loadUiType("form.ui")[0]
+form_class = uic.loadUiType("multicam.ui")[0]
 
 # iniciate id counter
 id = 0
@@ -23,7 +24,7 @@ id = 0
 isStop = False
 
 
-def grab(cam1, queue):
+def grab1(cam1, queue):
     global running
     global isStop
 
@@ -40,7 +41,29 @@ def grab(cam1, queue):
                 except:
                     pass
             queue.put(img)
-        while not q.empty():
+        while not q1.empty():
+            queue.get_nowait()
+        while isStop:
+            sys.exit()
+
+def grab2(cam1, queue):
+    global running
+    global isStop
+
+    capture1 = cv.VideoCapture(cam1)
+    while (1):
+        while (running1):
+            capture1.grab()
+            ret, img = capture1.read()
+            if not ret:
+                break
+            if not queue.empty():
+                try:
+                    queue.get_nowait()
+                except:
+                    pass
+            queue.put(img)
+        while not q2.empty():
             queue.get_nowait()
         while isStop:
             sys.exit()
@@ -73,6 +96,7 @@ class form1Class(QtGui.QMainWindow, form_class):
         self.startButton1.clicked.connect(self.start_clicked1)
         self.startButton1.setStyleSheet("background: black")
         self.Cam_1 = OwnImageWidget(self.Cam_1)
+        self.Cam_2 = OwnImageWidget(self.Cam_2)
         self.window_width = 620  # self.ImgWidget.frameSize().width()
         self.window_height = 400  # self.ImgWidget.frameSize().height()
         self.timer = QtCore.QTimer(self)
@@ -88,8 +112,10 @@ class form1Class(QtGui.QMainWindow, form_class):
     def start_clicked1(self):
         global running1
         running1 = True
-        if not capture_thread.isAlive():
-            capture_thread.start()
+        if not capture_thread_1.isAlive():
+            capture_thread_1.start()
+        if not capture_thread_2.isAlive():
+            capture_thread_2.start()
         self.startButton1.setEnabled(False)
         self.startButton1.setText('Starting...')
 
@@ -98,10 +124,10 @@ class form1Class(QtGui.QMainWindow, form_class):
         global minH
         global names
         # global recognizer
-        if not q.empty():
+        if not q1.empty():
             if running1:
                 self.startButton1.setText('Camera is live')
-            img = q.get()
+            img = q1.get()
 
             img_height, img_width, img_colors = img.shape
             scale_w = float(self.window_width) / float(img_width)
@@ -116,6 +142,24 @@ class form1Class(QtGui.QMainWindow, form_class):
             bpl = bpc * width
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
             self.Cam_1.setImage(image)
+        if not q2.empty():
+            if running1:
+                self.startButton1.setText('Camera is live')
+            img = q2.get()
+
+            img_height, img_width, img_colors = img.shape
+            scale_w = float(self.window_width) / float(img_width)
+            scale_h = float(self.window_height) / float(img_height)
+            scale = min([scale_w, scale_h])
+
+            if scale == 0:
+                scale = 1
+
+            img = cv.resize(img, None, fx=scale, fy=scale, interpolation=cv.INTER_CUBIC)
+            height, width, bpc = img.shape
+            bpl = bpc * width
+            image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
+            self.Cam_2.setImage(image)
 
     def closeEvent(self, event):
         global running1
@@ -127,7 +171,8 @@ class form1Class(QtGui.QMainWindow, form_class):
         self.parent().show()
 
 
-capture_thread = threading.Thread(target=grab, args=("rtsp://192.168.1.38:5554/camera", q))
+capture_thread_1 = threading.Thread(target=grab1, args=("rtsp://192.168.1.38:5554/camera", q1))
+capture_thread_2 = threading.Thread(target=grab2, args=("rtsp://192.168.1.17:5554/camera", q2))
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     form5 = form1Class()
