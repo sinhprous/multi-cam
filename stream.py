@@ -12,7 +12,7 @@ import os
 os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 
-running1 = False
+running = False
 q1 = queue.Queue()
 q2 = queue.Queue()
 
@@ -30,7 +30,7 @@ def grab1(cam1, queue):
 
     capture1 = cv.VideoCapture(cam1)
     while (1):
-        while (running1):
+        while (running):
             capture1.grab()
             ret, img = capture1.read()
             if not ret:
@@ -40,6 +40,7 @@ def grab1(cam1, queue):
                     queue.get_nowait()
                 except:
                     pass
+            img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
             queue.put(img)
         while not q1.empty():
             queue.get_nowait()
@@ -52,7 +53,7 @@ def grab2(cam1, queue):
 
     capture1 = cv.VideoCapture(cam1)
     while (1):
-        while (running1):
+        while (running):
             capture1.grab()
             ret, img = capture1.read()
             if not ret:
@@ -62,6 +63,7 @@ def grab2(cam1, queue):
                     queue.get_nowait()
                 except:
                     pass
+            img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
             queue.put(img)
         while not q2.empty():
             queue.get_nowait()
@@ -97,8 +99,8 @@ class form1Class(QtGui.QMainWindow, form_class):
         self.startButton1.setStyleSheet("background: black")
         self.Cam_1 = OwnImageWidget(self.Cam_1)
         self.Cam_2 = OwnImageWidget(self.Cam_2)
-        self.window_width = 620  # self.ImgWidget.frameSize().width()
-        self.window_height = 400  # self.ImgWidget.frameSize().height()
+        self.window_width = 731
+        self.window_height = 661
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(1)
@@ -110,8 +112,8 @@ class form1Class(QtGui.QMainWindow, form_class):
         self.move(qr.topLeft())
 
     def start_clicked1(self):
-        global running1
-        running1 = True
+        global running
+        running = True
         if not capture_thread_1.isAlive():
             capture_thread_1.start()
         if not capture_thread_2.isAlive():
@@ -125,7 +127,7 @@ class form1Class(QtGui.QMainWindow, form_class):
         global names
         # global recognizer
         if not q1.empty():
-            if running1:
+            if running:
                 self.startButton1.setText('Camera is live')
             img = q1.get()
 
@@ -143,7 +145,7 @@ class form1Class(QtGui.QMainWindow, form_class):
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
             self.Cam_1.setImage(image)
         if not q2.empty():
-            if running1:
+            if running:
                 self.startButton1.setText('Camera is live')
             img = q2.get()
 
@@ -162,13 +164,12 @@ class form1Class(QtGui.QMainWindow, form_class):
             self.Cam_2.setImage(image)
 
     def closeEvent(self, event):
-        global running1
+        global running
         global isStop
 
         isStop = True
-        running1 = False
+        running = False
         event.accept()
-        self.parent().show()
 
 
 capture_thread_1 = threading.Thread(target=grab1, args=("rtsp://192.168.1.38:5554/camera", q1))
