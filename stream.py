@@ -17,49 +17,22 @@ running1 = False
 faceid_thread = None
 q = queue.Queue()
 
-form_class = uic.loadUiType("form1.ui")[0]
+form_class = uic.loadUiType("form.ui")[0]
 
 font = cv.FONT_HERSHEY_SIMPLEX
 
 # iniciate id counter
 id = 0
-minW = 64.0
-minH = 48.0
 
 isStop = False
 
 
-def grab(cam, cam1, queue, width, height, fps):
+def grab(cam1, queue):
     global running
-    global running1
-    global minW
-    global minH
     global isStop
-
-    capture = cv.VideoCapture(cam)
-    capture.set(cv.CAP_PROP_FRAME_WIDTH, width)
-    capture.set(cv.CAP_PROP_FRAME_HEIGHT, height)
-    capture.set(cv.CAP_PROP_FPS, fps)
-    capture.set(3, 640)  # set video widht
-    capture.set(4, 480)  # set video height
-
-    # Define min window size to be recognized as a face
-    minW = 0.1 * capture.get(3)
-    minH = 0.1 * capture.get(4)
 
     capture1 = cv.VideoCapture(cam1)
     while (1):
-        while (running):
-            capture.grab()
-            retval, img = capture.retrieve(0)
-            if not queue.empty():
-                try:
-                    queue.get_nowait()
-                except:
-                    pass
-            queue.put(img)
-        while not q.empty():
-            queue.get_nowait()
         while (running1):
             capture1.grab()
             ret, img = capture1.read()
@@ -164,7 +137,7 @@ class form1Class(QtGui.QMainWindow, form_class):
         self.parent().show()
 
 
-capture_thread = threading.Thread(target=grab, args=(0, "rtsp://192.168.1.38:5554/camera", q, 1280, 720, 30))
+capture_thread = threading.Thread(target=grab, args=("rtsp://192.168.1.38:5554/camera", q))
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     form5 = form1Class()
