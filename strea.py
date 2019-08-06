@@ -101,56 +101,20 @@ class form1Class(QtGui.QMainWindow, form_class):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
         self.center()
-        self.startButton.clicked.connect(self.start_clicked)
-        self.startButton.setStyleSheet("background: black")
         self.startButton1.clicked.connect(self.start_clicked1)
         self.startButton1.setStyleSheet("background: black")
-        self.ImgWidget = OwnImageWidget(self.ImgWidget)
-        self.ImgWidget1 = OwnImageWidget(self.ImgWidget1)
+        self.Cam_1 = OwnImageWidget(self.Cam_1)
         self.window_width = 620  # self.ImgWidget.frameSize().width()
         self.window_height = 400  # self.ImgWidget.frameSize().height()
-        self.setBackground()
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(1)
-
-    def setBackground(self):
-        img = cv.imread("form1.PNG")
-
-        img_height, img_width, img_colors = img.shape
-        scale_w = float(self.window_width) / float(img_width)
-        scale_h = float(self.window_height) / float(img_height)
-        scale = min([scale_w, scale_h])
-
-        print(scale)
-        if scale == 0:
-            scale = 1
-
-        img = cv.resize(img, None, fx=0.75, fy=0.75, interpolation=cv.INTER_CUBIC)
-
-        img = cv.cvtColor(img, cv.COLOR_BGR2RGB)
-        height, width, bpc = img.shape
-        bpl = bpc * width
-        image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
-        self.ImgWidget1.setImage(image)
 
     def center(self):
         qr = self.frameGeometry()
         cp = QtGui.QDesktopWidget().availableGeometry().center()
         qr.moveCenter(cp)
         self.move(qr.topLeft())
-
-    def start_clicked(self):
-        global running
-        global running1
-        running = True
-        running1 = False
-        if not capture_thread.isAlive():
-            capture_thread.start()
-        self.startButton.setEnabled(False)
-        self.startButton.setText('Starting...')
-        self.startButton1.setEnabled(True)
-        self.startButton1.setText('IP Cam')
 
     def start_clicked1(self):
         global running
@@ -161,8 +125,6 @@ class form1Class(QtGui.QMainWindow, form_class):
             capture_thread.start()
         self.startButton1.setEnabled(False)
         self.startButton1.setText('Starting...')
-        self.startButton.setEnabled(True)
-        self.startButton.setText('USB Camera')
 
     def update_frame(self):
         global minW
@@ -188,7 +150,7 @@ class form1Class(QtGui.QMainWindow, form_class):
             height, width, bpc = img.shape
             bpl = bpc * width
             image = QtGui.QImage(img.data, width, height, bpl, QtGui.QImage.Format_RGB888)
-            self.ImgWidget.setImage(image)
+            self.Cam_1.setImage(image)
 
     def closeEvent(self, event):
         global running

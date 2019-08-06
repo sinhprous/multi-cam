@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1300</width>
-    <height>720</height>
+    <height>1457</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,36 +17,7 @@
    <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QGroupBox" name="groupBox">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>10</y>
-      <width>1280</width>
-      <height>680</height>
-     </rect>
-    </property>
-    <property name="sizePolicy">
-     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-      <horstretch>0</horstretch>
-      <verstretch>0</verstretch>
-     </sizepolicy>
-    </property>
-    <property name="title">
-     <string/>
-    </property>
-    <widget class="QWidget" name="ImgWidget1" native="true">
-     <property name="geometry">
-      <rect>
-       <x>0</x>
-       <y>0</y>
-       <width>1280</width>
-       <height>661</height>
-      </rect>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="ImgWidget" native="true">
+   <widget class="QWidget" name="Cam_1" native="true">
     <property name="geometry">
      <rect>
       <x>45</x>
@@ -55,19 +26,7 @@
       <height>720</height>
      </rect>
     </property>
-   </widget>
-   <widget class="QPushButton" name="startButton">
-    <property name="geometry">
-     <rect>
-      <x>700</x>
-      <y>80</y>
-      <width>200</width>
-      <height>61</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Start Camera USB</string>
-    </property>
+    <zorder>Cam_2</zorder>
    </widget>
    <widget class="QPushButton" name="startButton1">
     <property name="geometry">
