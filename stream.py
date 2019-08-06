@@ -12,14 +12,10 @@ import os
 os.environ["OPENCV_FFMPEG_CAPTURE_OPTIONS"] = "rtsp_transport;udp"
 
 
-running = False
 running1 = False
-faceid_thread = None
 q = queue.Queue()
 
 form_class = uic.loadUiType("form.ui")[0]
-
-font = cv.FONT_HERSHEY_SIMPLEX
 
 # iniciate id counter
 id = 0
@@ -90,10 +86,8 @@ class form1Class(QtGui.QMainWindow, form_class):
         self.move(qr.topLeft())
 
     def start_clicked1(self):
-        global running
         global running1
         running1 = True
-        running = False
         if not capture_thread.isAlive():
             capture_thread.start()
         self.startButton1.setEnabled(False)
@@ -105,8 +99,6 @@ class form1Class(QtGui.QMainWindow, form_class):
         global names
         # global recognizer
         if not q.empty():
-            if running:
-                self.startButton.setText('Camera is live')
             if running1:
                 self.startButton1.setText('Camera is live')
             img = q.get()
@@ -126,12 +118,10 @@ class form1Class(QtGui.QMainWindow, form_class):
             self.Cam_1.setImage(image)
 
     def closeEvent(self, event):
-        global running
         global running1
         global isStop
 
         isStop = True
-        running = False
         running1 = False
         event.accept()
         self.parent().show()
@@ -141,6 +131,6 @@ capture_thread = threading.Thread(target=grab, args=("rtsp://192.168.1.38:5554/c
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     form5 = form1Class()
-    form5.setWindowTitle('Form 5')
+    form5.setWindowTitle('AntiMatlab')
     form5.show()
     app.exec_()
