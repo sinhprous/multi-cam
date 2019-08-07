@@ -24,15 +24,15 @@ id = 0
 isStop = False
 
 
-def grab1(cam1, queue):
+def grab(cam, queue):
     global running
     global isStop
 
-    capture1 = cv.VideoCapture(cam1)
+    capture = cv.VideoCapture(cam)
     while (1):
         while (running):
-            capture1.grab()
-            ret, img = capture1.read()
+            capture.grab()
+            ret, img = capture.read()
             if not ret:
                 break
             if not queue.empty():
@@ -42,30 +42,7 @@ def grab1(cam1, queue):
                     pass
             img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
             queue.put(img)
-        while not q1.empty():
-            queue.get_nowait()
-        while isStop:
-            sys.exit()
-
-def grab2(cam1, queue):
-    global running
-    global isStop
-
-    capture1 = cv.VideoCapture(cam1)
-    while (1):
-        while (running):
-            capture1.grab()
-            ret, img = capture1.read()
-            if not ret:
-                break
-            if not queue.empty():
-                try:
-                    queue.get_nowait()
-                except:
-                    pass
-            img = cv.cvtColor(img, cv.COLOR_RGB2BGR)
-            queue.put(img)
-        while not q2.empty():
+        while not queue.empty():
             queue.get_nowait()
         while isStop:
             sys.exit()
@@ -172,8 +149,8 @@ class form1Class(QtGui.QMainWindow, form_class):
         event.accept()
 
 
-capture_thread_1 = threading.Thread(target=grab1, args=("rtsp://192.168.1.38:5554/camera", q1))
-capture_thread_2 = threading.Thread(target=grab2, args=("rtsp://192.168.1.17:5554/camera", q2))
+capture_thread_1 = threading.Thread(target=grab, args=("rtsp://192.168.1.38:5554/camera", q1))
+capture_thread_2 = threading.Thread(target=grab, args=("rtsp://192.168.1.17:5554/camera", q2))
 if __name__ == '__main__':
     app = QtGui.QApplication(sys.argv)
     form5 = form1Class()
