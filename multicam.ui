@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1504</width>
-    <height>810</height>
+    <width>1920</width>
+    <height>1084</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="startButton1">
+   <widget class="QPushButton" name="startButton">
     <property name="geometry">
      <rect>
-      <x>690</x>
-      <y>20</y>
+      <x>10</x>
+      <y>30</y>
       <width>121</width>
       <height>51</height>
      </rect>
@@ -30,10 +30,10 @@
    <widget class="QWidget" name="Cam_2" native="true">
     <property name="geometry">
      <rect>
-      <x>760</x>
-      <y>90</y>
-      <width>731</width>
-      <height>661</height>
+      <x>950</x>
+      <y>110</y>
+      <width>961</width>
+      <height>791</height>
      </rect>
     </property>
     <property name="autoFillBackground">
@@ -47,9 +47,9 @@
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>90</y>
-      <width>731</width>
-      <height>661</height>
+      <y>110</y>
+      <width>881</width>
+      <height>791</height>
      </rect>
     </property>
     <property name="sizePolicy">
@@ -61,6 +61,40 @@
     <property name="autoFillBackground">
      <bool>true</bool>
     </property>
+    <zorder>Cam_2</zorder>
+   </widget>
+   <widget class="QPushButton" name="thresholdButton">
+    <property name="geometry">
+     <rect>
+      <x>160</x>
+      <y>30</y>
+      <width>111</width>
+      <height>51</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Low Threshold</string>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ipCam_1">
+    <property name="geometry">
+     <rect>
+      <x>320</x>
+      <y>50</y>
+      <width>121</width>
+      <height>27</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLineEdit" name="ipCam_2">
+    <property name="geometry">
+     <rect>
+      <x>460</x>
+      <y>50</y>
+      <width>121</width>
+      <height>27</height>
+     </rect>
+    </property>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -68,7 +102,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1504</width>
+     <width>1920</width>
      <height>25</height>
     </rect>
    </property>
